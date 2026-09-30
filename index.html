@@ -330,8 +330,7 @@ function drawG(){const q=$("q").value.trim(),h=$("wG");
  if(!q){h.innerHTML="";G={q:"",txt:""};return}
  if(G.q===q&&h.firstChild)return;
  G={q,txt:""};
- const u="https://www.google.com/search?q="+encodeURIComponent(q+" screen protector compatible models and add 
- with comma and add Vertical bar and the size in the end");
+ const u="https://www.google.com/search?q="+encodeURIComponent(q+" screen protector compatible models and add with comma and add vertical bar and the size in the end");
  h.innerHTML=`<div class="box"><a class="btn s" href="${u}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">🔎 دوّر بكوكل عن كل الأجهزة</a><div class="mu" style="margin:8px 0 4px">انسخ نتيجة كوكل (الأجهزة مفصولة بفواصل) والصقها هنا:</div><textarea id="gT" rows="3" placeholder="Galaxy A71, Galaxy A72, Galaxy M51, ..."></textarea><div id="gP"></div></div>`}
 function drawGP(){const l=parseList($("gT").value);G.txt=$("gT").value;
  $("gP").innerHTML=l.length?`<div class="mu" style="margin:6px 0">لقيت <b>${l.length}</b> جهاز</div><div class="chips">${l.map(x=>`<span class="badge">${esc(x)}</span>`).join(" ")}</div><button class="btn s" id="gAdd" style="margin-top:8px">➕ احفظها كمجموعة جديدة</button>`:""}
