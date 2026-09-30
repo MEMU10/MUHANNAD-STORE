@@ -108,6 +108,7 @@ textarea{height:110px;direction:ltr;font-size:12px}
  </div>
  <div id="sL"></div>
  <div id="wB"></div>
+ <div id="wG"></div>
  <details class="box" id="nBox"><summary>➕ إضافة لاصقة جديدة</summary>
   <p class="mu">اكتب اسم الجهاز (مثال: Galaxy A71) والكمية. إذا الجهاز موجود بالقاعدة، تنزاد الكمية وتظهر كل الأجهزة اللي تناسبه. إذا جديد، تقدر تكتب أجهزة ثانية معاه مفصولة بفاصلة.</p>
   <input id="nN" placeholder="Galaxy A71, Note 10 Lite, ..." style="margin-bottom:8px">
@@ -323,10 +324,23 @@ const errMsg=x=>x&&x.code==="not_granted"?"لازم توافق على الطلب
 let SM=apiSM(),W={q:"",r:null,busy:0,err:""};
 if(!SM)try{if(window.claude&&claude.use)claude.use("sample").then(x=>{SM=x;drawW()}).catch(()=>{})}catch(e){}
 
+const parseList=s=>String(s).split(/[,،;\n]+/).map(x=>x.replace(/^\s*(and|و)\s+/i,"").replace(/^\s*(\d+[.)]|[-•*])\s*/,"").replace(/\*\*/g,"").trim()).filter(x=>x&&x.length<=50).filter((x,i,a)=>a.findIndex(y=>norm(y)===norm(x))===i);
+let G={q:"",txt:""};
+function drawG(){const q=$("q").value.trim(),h=$("wG");
+ if(!q){h.innerHTML="";G={q:"",txt:""};return}
+ if(G.q===q&&h.firstChild)return;
+ G={q,txt:""};
+ const u="https://www.google.com/search?q="+encodeURIComponent(q+" screen protector compatible models and add allofit with comma");
+ h.innerHTML=`<div class="box"><a class="btn s" href="${u}" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">🔎 دوّر بكوكل عن كل الأجهزة</a><div class="mu" style="margin:8px 0 4px">انسخ نتيجة كوكل (الأجهزة مفصولة بفواصل) والصقها هنا:</div><textarea id="gT" rows="3" placeholder="Galaxy A71, Galaxy A72, Galaxy M51, ..."></textarea><div id="gP"></div></div>`}
+function drawGP(){const l=parseList($("gT").value);G.txt=$("gT").value;
+ $("gP").innerHTML=l.length?`<div class="mu" style="margin:6px 0">لقيت <b>${l.length}</b> جهاز</div><div class="chips">${l.map(x=>`<span class="badge">${esc(x)}</span>`).join(" ")}</div><button class="btn s" id="gAdd" style="margin-top:8px">➕ احفظها كمجموعة جديدة</button>`:""}
+document.addEventListener("input",e=>{if(e.target.id==="gT")drawGP()});
+document.addEventListener("click",e=>{if(e.target.id!=="gAdd")return;const q=$("q").value.trim(),l=parseList($("gT").value),n=[q,...l].filter((x,i,a)=>a.findIndex(y=>norm(y)===norm(x))===i);
+ db.custom.push({n,s:""});save();G={q:"",txt:""};$("wG").innerHTML="";$("q").value=q;drawStk()});
 function drawW(){
- const q=$("q").value.trim(),h=$("wB");
+ const q=$("q").value.trim(),h=$("wB");drawG();
  if(!q){h.innerHTML="";return}
- if(!SM){h.innerHTML=`<div class="box mu">تريد تتأكد أو الجهاز مو موجود؟ <a href="https://www.google.com/search?q=${encodeURIComponent(q+" screen protector compatible models")}" target="_blank" rel="noopener" style="color:var(--ac);text-decoration:underline">🔎 ابحث بالويب عن الأجهزة المشابهة</a></div>`;return}
+ if(!SM){h.innerHTML=`<div class="box mu">تريد تتأكد أو الجهاز مو موجود؟ <a href="https://www.google.com/search?q=${encodeURIComponent(q+" screen protector compatible models and add allofit with comma")}" target="_blank" rel="noopener" style="color:var(--ac);text-decoration:underline">🔎 ابحث بالويب عن الأجهزة المشابهة</a></div>`;return}
  if(W.q!==q||(!W.r&&!W.busy)){h.innerHTML=`<div class="box"><button class="btn s" id="wGo">🌐 دوّر عن أجهزة ثانية تناسبها نفس اللاصقة</button>${W.err&&W.q===q?`<div class="mu">${esc(W.err)}</div>`:""}</div>`;return}
  if(W.busy){h.innerHTML='<div class="box mu">جاري البحث...</div>';return}
  const r=W.r,dv=r.devices||[],nm=x=>norm(x);
