@@ -108,10 +108,17 @@ textarea{height:110px;direction:ltr;font-size:12px}
  </div>
  <div id="sL"></div>
  <div id="wB"></div>
- <details class="box"><summary>➕ إضافة مجموعة أجهزة جديدة</summary>
-  <p class="mu">اكتب الأجهزة المتوافقة مفصولة بفاصلة.</p>
-  <input id="nN" placeholder="Redmi 12C, Poco C55, ..." style="margin-bottom:8px">
-  <div class="row"><input id="nS" placeholder='الحجم بالإنش (اختياري)'><button class="btn" id="nAdd">إضافة</button></div>
+ <details class="box" id="nBox"><summary>➕ إضافة لاصقة جديدة</summary>
+  <p class="mu">اكتب اسم الجهاز (مثال: Galaxy A71) والكمية. إذا الجهاز موجود بالقاعدة، تنزاد الكمية وتظهر كل الأجهزة اللي تناسبه. إذا جديد، تقدر تكتب أجهزة ثانية معاه مفصولة بفاصلة.</p>
+  <input id="nN" placeholder="Galaxy A71, Note 10 Lite, ..." style="margin-bottom:8px">
+  <div class="row"><input id="nQ" type="number" inputmode="numeric" min="1" placeholder="الكمية (الافتراضي 1)"><input id="nS" placeholder="الحجم بالإنش (اختياري)"></div>
+  <button class="btn" id="nAuto" style="width:100%">➕ إضافة اللاصقة</button>
+  <div class="mu" id="nMsg" style="margin-top:8px"></div>
+  <details style="margin-top:8px"><summary class="mu">📥 إضافة قائمة كبيرة دفعة وحدة</summary>
+   <p class="mu">كل سطر مجموعة: الأجهزة مفصولة بفاصلة ثم | ثم الحجم. مثال:<br><span dir="ltr">Galaxy A71, Note 10 Lite|6.7</span></p>
+   <textarea id="nBulk" style="width:100%;min-height:120px" placeholder="الصق القائمة هنا"></textarea>
+   <button class="btn s" id="nBulkGo" style="margin-top:8px">إضافة القائمة</button>
+  </details>
  </details>
 </section>
 
@@ -141,7 +148,7 @@ const B=[
 "iPhone 14 Pro, iPhone 15, iPhone 15 Pro, iPhone 16|6.1",
 "iPhone 14 Pro Max, iPhone 15 Plus, iPhone 15 Pro Max, iPhone 16 Plus|6.7",
 "Samsung Galaxy A50, Galaxy A30, Galaxy A30s, Galaxy A20, Galaxy M30, Galaxy M31|6.4",
-"Samsung Galaxy A51, Galaxy A71 (نسخة مسطحة حسب الموديل)|6.5",
+"Samsung Galaxy A51, Galaxy A51 5G|6.5",
 "Samsung Galaxy A10, Galaxy A10s, Galaxy M10|6.2",
 "Samsung Galaxy Note 10, Galaxy S10|6.3",
 "Samsung Galaxy S20 FE, Galaxy S21 FE|6.4",
@@ -158,7 +165,38 @@ const B=[
 "Oppo A5 2020, Oppo A9 2020|6.5",
 "Realme C11, Realme C12, Realme C15|6.5",
 "Infinix Hot 10, Infinix Hot 10S, Infinix Hot 11S|6.82",
-"Tecno Spark 7, Tecno Spark 7 Pro|6.52"
+"Tecno Spark 7, Tecno Spark 7 Pro|6.52",
+"Samsung Galaxy A71, Galaxy A71 5G, Galaxy Note 10 Lite, Galaxy M51, Galaxy M62, Galaxy M52 5G, Galaxy A81, Galaxy S10 Lite|6.7",
+"Samsung Galaxy A70, Galaxy A70s|6.7",
+"Samsung Galaxy A72, Galaxy A73 5G|6.7",
+"Samsung Galaxy A52, Galaxy A52s, Galaxy A52 5G|6.5",
+"Samsung Galaxy A12, Galaxy A02s, Galaxy A03s, Galaxy M12, Galaxy F12, Galaxy M02s|6.5",
+"Xiaomi Redmi Note 7, Redmi Note 7 Pro, Redmi Note 7S|6.3",
+"Xiaomi Redmi 10C, Redmi 12C, Poco C40, Poco C55|6.71",
+"Vivo Y20, Vivo Y20i, Vivo Y20s, Vivo Y12s, Vivo Y12a, Vivo Y3s|6.51",
+"Vivo Y12, Vivo Y15, Vivo Y17, Vivo Y11 2019|6.35",
+"iPhone 16 Pro|6.3","iPhone 16 Pro Max|6.9",
+"iPhone 5, iPhone 5s, iPhone SE 2016|4.0",
+"Samsung Galaxy A80, Galaxy A90 5G|6.7",
+"Samsung Galaxy A40|5.9",
+"Samsung Galaxy A10e, Galaxy A20e|5.8",
+"Xiaomi Redmi Note 8 Pro|6.53",
+"Xiaomi Redmi 8, Redmi 8A, Redmi 8A Dual|6.22",
+"Xiaomi Redmi 7, Redmi Y3|6.26",
+"Xiaomi Redmi 6, Redmi 6A|5.45",
+"Xiaomi Redmi Note 5, Redmi Note 5 Pro|5.99",
+"Xiaomi Redmi Note 6 Pro|6.26",
+"Xiaomi Mi 9T, Mi 9T Pro, Redmi K20, Redmi K20 Pro|6.39",
+"Xiaomi Poco F3, Redmi K40, Redmi K40 Pro, Mi 11i|6.67",
+"Xiaomi Poco M3 Pro 5G, Redmi Note 10 5G|6.5",
+"Huawei P20 Lite, Huawei Nova 3e|5.84",
+"Huawei Y6 2019, Honor 8A|6.09",
+"Huawei Y5 2019, Honor 8S|5.71",
+"Huawei P Smart 2019, Honor 10 Lite|6.21",
+"Huawei Nova 5T, Honor 20|6.26",
+"Huawei P40 Lite, Huawei Nova 6 SE, Huawei Nova 7i|6.4",
+"Oppo A5s, Oppo A7, Oppo A12|6.22",
+"Oppo A15, Oppo A15s|6.52"
 ].map(s=>{const[a,z]=s.split("|");return{n:a.split(",").map(x=>x.trim()),s:z}});
 const $=id=>document.getElementById(id);
 // نوافذ داخل الصفحة بدل alert/confirm/prompt (المتصفح يمنعها داخل الصفحات المنشورة)
@@ -167,7 +205,7 @@ function dlg(msg,o={}){return new Promise(res=>{
  if(o.input)i.focus();
  const end=v=>{$("ov").hidden=true;$("dOk").onclick=$("dNo").onclick=null;res(v)};
  $("dOk").onclick=()=>end(o.input?i.value:true);$("dNo").onclick=()=>end(o.input?null:false)})}
-let db={exp:[],sales:[],rep:[],stock:{},custom:[]};
+let db={exp:[],sales:[],rep:[],stock:{},custom:[],extra:{}};
 try{const r=localStorage.getItem("shopdb");if(r)db=Object.assign(db,JSON.parse(r))}catch(e){}
 const save=()=>{try{localStorage.setItem("shopdb",JSON.stringify(db))}catch(e){dlg("تعذر الحفظ في المتصفح",{info:1})}};
 const fmt=n=>Number(n).toLocaleString("en");
@@ -254,7 +292,9 @@ setTh(th||(dm()?"dark":"light"));
 $("tg").onclick=()=>setTh(document.documentElement.dataset.theme=="dark"?"light":"dark");
 
 // اللواصق
-const all=()=>B.map((g,i)=>({id:"b"+i,...g})).concat(db.custom.map((g,i)=>({id:"c"+i,...g})));
+const all=()=>B.map((g,i)=>({id:"b"+i,...g})).concat(db.custom.map((g,i)=>({id:"c"+i,...g}))).map(g=>{const e=(db.extra||{})[g.id];return e&&e.length?{...g,n:[...g.n,...e.filter(x=>!g.n.some(y=>same(x,y)))]}:g});
+const canon=s=>String(s).toLowerCase().replace(/\(.*?\)/g,"").replace(/samsung|galaxy|xiaomi|huawei|oppo|realme|infinix|tecno|apple|vivo|honor|nokia|motorola|itel|lenovo|google/g,"").replace(/[\s\-_]/g,"");
+const same=(a,b)=>{const x=canon(a),y=canon(b);return x.length>1&&x===y};
 function drawStk(){
  const q=norm($("q").value),only=$("onlyIn").checked;
  let l=all().filter(g=>{
@@ -262,6 +302,7 @@ function drawStk(){
   if(only&&!has)return false;
   if(!q)return has;
   return g.n.some(x=>norm(x).includes(q))||(g.s&&g.s.includes($("q").value.trim()))});
+ l.sort((a,b)=>(db.stock[b.id]||0)-(db.stock[a.id]||0));
  $("sL").innerHTML=l.length?l.map(g=>{const k=db.stock[g.id]||0;
   return `<div class="box g ${k?"in":""}"><div class="mu">${g.s?esc(g.s)+" إنش":""} ${k?'<span class="badge">'+(g.s?" · ":"")+'متوفر عندك</span>':""}</div><div>${g.n.map(x=>`<span class="dev ${q&&norm(x).includes(q)?"m":""}">${esc(x)}</span>`).join("")}</div>
   <div class="qty"><button class="btn s" data-g="${g.id}" data-d="-1">−</button><b>${k}</b><button class="btn s" data-g="${g.id}" data-d="1">+</button><span class="mu">الكمية عندك</span></div></div>`}).join(""):
@@ -271,11 +312,21 @@ $("q").oninput=()=>{drawStk();drawW()};$("onlyIn").onchange=drawStk;
 $("sL").onclick=e=>{const g=e.target.dataset.g;if(!g)return;
  db.stock[g]=Math.max(0,(db.stock[g]||0)+ +e.target.dataset.d);save();drawStk()};
 // بحث ذكي عن أجهزة ثانية بنفس اللاصق (Claude)
-let SM=null,W={q:"",r:null,busy:0,err:""};
-try{if(window.claude&&claude.use)claude.use("sample").then(x=>{SM=x;drawW()}).catch(()=>{})}catch(e){}
+const KEY_LS="shopapikey",getKey=()=>{try{return localStorage.getItem(KEY_LS)||""}catch(e){return""}};
+function apiSM(){const k=getKey();if(!k)return null;
+ const call=async(prompt,web)=>{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":k,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-5-5",max_tokens:4000,messages:[{role:"user",content:prompt}],...(web?{tools:[{type:"web_search_20250305",name:"web_search",max_uses:4}]}:{})})});
+  if(!r.ok){const e=new Error("api");e.code=r.status;throw e}
+  const d=await r.json();return(d.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("")};
+ return{json:async p=>{let t;try{t=await call(p+" Use web search to verify compatibility if helpful.",true)}catch(e){if(e.code===400||e.code===403||e.code===404)t=await call(p,false);else throw e}
+  const m=t.replace(/```json|```/g,"").match(/\{[\s\S]*\}/);if(!m){const e=new Error("parse");e.code="parse";throw e}return JSON.parse(m[0])}}}
+const errMsg=x=>x&&x.code==="not_granted"?"لازم توافق على الطلب":x&&x.code===401?"مفتاح API غير صحيح":x&&x.code===429?"وصلت حد الاستخدام، جرّب بعد شوي":x&&x.code==="parse"?"وصلت نتيجة غير مفهومة، جرّب مرة ثانية":"تعذر البحث الآن، جرّب مرة ثانية";
+let SM=apiSM(),W={q:"",r:null,busy:0,err:""};
+if(!SM)try{if(window.claude&&claude.use)claude.use("sample").then(x=>{SM=x;drawW()}).catch(()=>{})}catch(e){}
+
 function drawW(){
  const q=$("q").value.trim(),h=$("wB");
- if(!SM||!q){h.innerHTML="";return}
+ if(!q){h.innerHTML="";return}
+ if(!SM){h.innerHTML=`<div class="box mu">تريد تتأكد أو الجهاز مو موجود؟ <a href="https://www.google.com/search?q=${encodeURIComponent(q+" screen protector compatible models")}" target="_blank" rel="noopener" style="color:var(--ac);text-decoration:underline">🔎 ابحث بالويب عن الأجهزة المشابهة</a></div>`;return}
  if(W.q!==q||(!W.r&&!W.busy)){h.innerHTML=`<div class="box"><button class="btn s" id="wGo">🌐 دوّر عن أجهزة ثانية تناسبها نفس اللاصقة</button>${W.err&&W.q===q?`<div class="mu">${esc(W.err)}</div>`:""}</div>`;return}
  if(W.busy){h.innerHTML='<div class="box mu">جاري البحث...</div>';return}
  const r=W.r,dv=r.devices||[],nm=x=>norm(x);
@@ -284,7 +335,7 @@ function drawW(){
  <div>${dv.map(x=>`<span class="dev">${esc(x)}</span>`).join("")||"لم أجد أجهزة أخرى"}</div>
  ${fit.length?`<div style="margin-top:8px"><b>✅ عندك لاصقة تناسب:</b>${fit.map(g=>`<div class="mu">${esc(g.n.slice(0,3).join("، "))}${g.s?" · "+esc(g.s)+" إنش":""} · الكمية ${db.stock[g.id]}</div>`).join("")}</div>`:'<div class="mu" style="margin-top:8px">ما عندك لاصقة متوفرة من هذه الأجهزة.</div>'}
  ${r.note?`<div class="mu">${esc(r.note)}</div>`:""}
- <div class="mu">النتيجة من معرفة Claude وليست بحثاً حياً بالإنترنت، تأكد من الموديل قبل الشراء.</div>
+ <div class="mu">النتيجة من Claude (مع بحث بالإنترنت إذا متاح)، تأكد من الموديل قبل الشراء.</div>
  <div class="row" style="margin-top:8px"><button class="btn s" id="wMore">🔁 دوّر عن المزيد</button><button class="btn s" id="wAdd">➕ احفظها كمجموعة جديدة</button></div>${W.err&&W.q===q?`<div class="mu">${esc(W.err)}</div>`:""}</div>`}
 $("wB").onclick=async e=>{
  if(e.target.id==="wAdd"&&W.r){const n=[W.q,...(W.r.devices||[])].filter((x,i,a)=>a.findIndex(y=>norm(y)===norm(x))===i);db.custom.push({n,s:String(W.r.size||"")});save();$("q").value=W.q;W.r=null;drawStk();return}
@@ -293,22 +344,42 @@ $("wB").onclick=async e=>{
    const add=(m&&Array.isArray(m.devices)?m.devices:[]).map(x=>String(x).trim()).filter(Boolean);
    const al=[...cur,...add].filter((x,i,a)=>a.findIndex(y=>norm(y)===norm(x))===i);
    W.r=Object.assign({},keep,{devices:al});if(al.length===cur.length)W.err="ما لقيت أجهزة إضافية";W.busy=0}
-  catch(x){W.r=keep;W.busy=0;W.err=x&&x.code==="not_granted"?"لازم توافق على الطلب":"تعذر البحث الآن، جرّب مرة ثانية"}
+  catch(x){W.r=keep;W.busy=0;W.err=errMsg(x)}
   drawW();return}
  if(e.target.id!=="wGo"||!SM)return;
  const q=$("q").value.trim();W={q,r:null,busy:1,err:""};drawW();
  try{const r=await SM.json(`Phone/tablet model: "${q}". Return its screen size in inches and an EXHAUSTIVE list of every phone/tablet model worldwide (all brands, all regions, all regional and carrier variants, e.g. 4G/5G/Lite/Pro/Neo/rebrands) whose screen protector is the same (same dimensions and same flat/curved type). Do not limit the count: list every one you know, typically 20 to 60 models when they exist, and do not leave out models just to be brief. Use the plain marketing name without duplicates. Reply with JSON only: {"size":"6.7","devices":["Brand Model"],"note":"short Arabic note if fit differs by variant, else empty"}`,{modelTier:"complex"});
-  W.r=r&&typeof r==="object"?r:{devices:[]};W.busy=0}catch(x){W.busy=0;W.err=x&&x.code==="not_granted"?"لازم توافق على الطلب":"تعذر البحث الآن، جرّب مرة ثانية"}
+  W.r=r&&typeof r==="object"?r:{devices:[]};W.busy=0}catch(x){W.busy=0;W.err=errMsg(x)}
  drawW()};
-$("nAdd").onclick=()=>{const n=$("nN").value.split(/[,،]/).map(x=>x.trim()).filter(Boolean),s=$("nS").value.trim();
- if(!n.length){dlg("اكتب اسم جهاز واحد على الأقل",{info:1});return}
- db.custom.push({n,s});save();$("nN").value="";$("nS").value="";$("q").value=n[0];drawStk()};
+$("nAuto").onclick=async()=>{
+ const raw=$("nN").value.split(/[,،]/).map(x=>x.trim()).filter(Boolean),qty=Math.max(1,parseInt($("nQ").value)||1),sz=$("nS").value.trim(),msg=$("nMsg");
+ if(!raw.length){dlg("اكتب اسم جهاز واحد على الأقل",{info:1});return}
+ const q=raw[0];let list=raw,size=sz;const b=$("nAuto");b.disabled=true;
+ if(SM&&!all().some(g=>g.n.some(a=>same(a,q)))){
+  msg.textContent="جاري البحث عن الأجهزة المتوافقة...";
+  try{const r=await SM.json(`Phone/tablet model: "${q}". Return its screen size in inches and an EXHAUSTIVE list of every phone/tablet model worldwide whose screen protector is the same. Reply with JSON only: {"size":"6.7","devices":["Brand Model"]}`,{modelTier:"complex"});
+   list=[...raw,...(r&&Array.isArray(r.devices)?r.devices:[]).map(x=>String(x).trim()).filter(Boolean)];size=sz||String(r&&r.size||"")}catch(x){msg.textContent=errMsg(x)}
+ }
+ list=list.filter((x,i,a)=>a.findIndex(y=>same(y,x))===i);
+ const g=all().find(x=>x.n.some(a=>list.some(c=>same(a,c))));
+ if(g){
+  const add=list.filter(c=>!g.n.some(a=>same(a,c)));
+  db.extra=db.extra||{};if(add.length)db.extra[g.id]=[...(db.extra[g.id]||[]),...add];
+  db.stock[g.id]=(db.stock[g.id]||0)+qty;
+  msg.textContent=`لقيت الجهاز بالقاعدة وزدت الكمية (+${qty}). اللاصقة تناسب ${g.n.length+add.length} جهاز ✔`;
+ }else{
+  db.custom.push({n:list,s:size});db.stock["c"+(db.custom.length-1)]=qty;
+  msg.textContent=`ما لقيته بالقاعدة، انحفظ كمجموعة جديدة (${list.length} جهاز). دوّر بالويب من رابط البحث وأضف أي جهاز ناقص.`;
+ }
+ save();$("nN").value="";$("nQ").value="";$("nS").value="";$("q").value=q;drawStk();drawW();b.disabled=false};
 
+$("nBulkGo").onclick=()=>{let c=0;$("nBulk").value.split(/\n/).forEach(l=>{const[a,z]=l.split("|"),n=(a||"").split(/[,،]/).map(x=>x.trim()).filter(Boolean);if(n.length){db.custom.push({n,s:(z||"").trim()});c++}});
+ if(c){save();$("nBulk").value="";drawStk()}$("nMsg").textContent=c?`انضافت ${c} مجموعة ✔`:"ما لقيت أسطر صالحة"};
 // النسخ الاحتياطي
 $("bEx").onclick=()=>{$("bT").value=JSON.stringify(db);$("bT").select();$("bM").textContent="انسخ النص واحفظه في مكان آمن (ملاحظات أو واتساب لنفسك)."};
 $("bIm").onclick=async()=>{try{const d=JSON.parse($("bT").value);if(!Array.isArray(d.exp))throw 0;
  if(!await dlg("راح تستبدل البيانات الحالية بالنسخة. متأكد؟"))return;
- db=Object.assign({exp:[],sales:[],rep:[],stock:{},custom:[]},d);save();drawExp();drawStk();drawRep();$("bM").textContent="تم الاسترجاع ✔"}catch(e){$("bM").textContent="النص غير صالح."}};
+ db=Object.assign({exp:[],sales:[],rep:[],stock:{},custom:[],extra:{}},d);save();drawExp();drawStk();drawRep();$("bM").textContent="تم الاسترجاع ✔"}catch(e){$("bM").textContent="النص غير صالح."}};
 
 drawExp();drawStk();drawRep();
 </script>
