@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b7285">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>إدارة المحل</title>
+<style>
+:root{--bg:#eaf2f3;--sf:#fff;--tx:#12262b;--mu:#5d7379;--ac:#0b7285;--ac2:#d3eef2;--ok:#1b8a3f;--bad:#c7362b;--ln:#cfe0e3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1719;--sf:#15252a;--tx:#e6f2f4;--mu:#8fa9af;--ac:#3cc4dc;--ac2:#173940;--ok:#4cc38a;--bad:#ff7b6b;--ln:#254046;}}
+:root[data-theme="dark"]{--bg:#0d1719;--sf:#15252a;--tx:#e6f2f4;--mu:#8fa9af;--ac:#3cc4dc;--ac2:#173940;--ok:#4cc38a;--bad:#ff7b6b;--ln:#254046;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.6 Tajawal,Tahoma,sans-serif}
+main{max-width:760px;margin:0 auto;padding:14px}
+h1{font-size:22px;margin:6px 0 12px}
+nav{display:flex;gap:6px;background:var(--sf);padding:5px;border-radius:12px;border:1px solid var(--ln);margin-bottom:14px}
+nav button{flex:1;white-space:nowrap;border:0;background:none;color:var(--mu);font:500 13px Tajawal,Tahoma,sans-serif;padding:9px 2px;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff}
+.box{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:12px;margin-bottom:12px}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.btn{border:0;background:var(--ac);color:#fff;padding:10px 16px;border-radius:8px;font:500 15px Tajawal,Tahoma,sans-serif;cursor:pointer}
+.btn.s{background:var(--ac2);color:var(--ac);padding:6px 12px}
+.tot{font-size:30px;font-weight:700;color:var(--ac)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--ac2);color:var(--ac);border-radius:20px;padding:2px 10px;font-size:14px}
+.it{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--ln)}
+.it:last-child{border:0}.mu{color:var(--mu);font-size:14px}
+.x{background:none;border:0;color:var(--bad);font-size:20px;cursor:pointer}
+.g{border-inline-start:4px solid var(--ln)}.g.in{border-inline-start-color:var(--ok)}
+.dev{display:inline-block;background:var(--bg);border:1px solid var(--ln);border-radius:6px;padding:0 8px;margin:2px;font-size:14px}
+.dev.m{background:var(--ac2);border-color:var(--ac);font-weight:700}
+.hd{display:flex;justify-content:space-between;align-items:center}.tg{background:var(--sf);border:1px solid var(--ln);border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer}
+.st{width:auto;padding:4px 8px;font-size:14px}.pay{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;font-size:15px}
+.qty{display:flex;align-items:center;gap:8px;margin-top:8px}.qty b{min-width:28px;text-align:center;font-size:18px}
+.badge{color:var(--ok);font-weight:700;font-size:14px}
+label.c{display:flex;gap:8px;align-items:center;margin:8px 0}label.c input{width:auto}
+textarea{height:110px;direction:ltr;font-size:12px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:99}.ov[hidden]{display:none}.dl{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:16px;width:100%;max-width:340px}.dl p{margin:0 0 10px}.dl .ac{display:flex;gap:8px;margin-top:12px}.dl .ac .btn{flex:1}
+</style>
+</head>
+<body>
+<main>
+<div class="hd"><h1>📱 إدارة المحل</h1><button class="tg" id="tg" aria-label="تبديل الوضع الليلي والنهاري">🌙</button></div>
+<nav id="nav"><button data-t="sal" class="on">المبيعات</button><button data-t="rep">الزبائن</button><button data-t="exp">المصروفات</button><button data-t="stk">اللواصق</button><button data-t="bak">نسخة</button></nav>
+
+<section id="sal">
+ <div class="box">
+  <div class="row"><input type="date" id="sD"><input id="sN" placeholder="اسم المادة (شاشة A50)"></div>
+  <div class="row"><input id="sC" type="number" inputmode="decimal" placeholder="سعر الشراء مع التوصيل"><input id="sP" type="number" inputmode="decimal" placeholder="سعر البيع"></div>
+  <div class="row"><input id="sQ" type="number" inputmode="numeric" value="1" min="1" placeholder="العدد"><div class="mu" id="sPre" style="align-self:center">الربح: 0</div></div>
+  <button class="btn" id="sAdd">تسجيل بيع</button>
+ </div>
+ <div class="box">
+  <div class="row"><div><div class="mu">الشهر</div><input type="month" id="sM"></div><div><div class="mu">أو يوم معين</div><input type="date" id="sDay"></div></div>
+  <button class="btn s" id="sDayX" hidden style="margin-top:6px">✕ ارجع لعرض الشهر كامل</button>
+  <div class="row" style="margin-top:10px"><div><div class="mu">المبيعات</div><b id="sT1">0</b></div><div><div class="mu">تكلفة الشراء</div><b id="sT2">0</b></div></div>
+  <div class="mu" id="sBr" style="margin-top:6px"></div>
+  <div class="mu">الربح الكلي (مبيعات + تصليح)</div><div class="tot" id="sT3">0</div>
+  <div class="mu" style="margin-top:6px">الصافي بعد مصروفات <span id="sPer">الشهر</span>: <b id="sT4">0</b></div>
+ </div>
+ <div class="box" id="sL2"></div>
+</section>
+
+<section id="rep" hidden>
+ <div class="box">
+  <div class="row"><input id="rN" placeholder="اسم الزبون"><input id="rP" type="tel" inputmode="tel" placeholder="رقم الهاتف"></div>
+  <input id="rF" placeholder="العطل (مثال: شاشة مكسورة، ما يشحن)" style="margin-bottom:8px">
+  <div class="row"><input type="date" id="rD"><input type="time" id="rT"></div>
+  <div class="row"><input id="rTot" type="number" inputmode="decimal" placeholder="المبلغ الكلي"><input id="rPd" type="number" inputmode="decimal" placeholder="المدفوع"></div>
+  <input id="rC" type="number" inputmode="decimal" placeholder="تكلفة القطع/الشراء على المحل (اختياري)" style="margin-bottom:8px">
+  <div class="row"><select id="rS"><option>قيد التصليح</option><option>جاهز</option><option>تم التسليم</option></select><div id="rPre" class="mu" style="align-self:center">المتبقي: 0</div></div>
+  <button class="btn" id="rAdd">حفظ بيانات الزبون</button>
+ </div>
+ <div class="box">
+  <div class="mu">إجمالي الديون على الزبائن</div><div class="tot" id="rDebt" style="color:var(--bad)">0</div>
+  <input id="rQ" type="search" placeholder="بحث بالاسم أو الرقم أو العطل" style="margin-top:8px">
+  <label class="c"><input type="checkbox" id="rOnly"> اللي عليهم متبقي فقط</label>
+ </div>
+ <div id="rL"></div>
+</section>
+
+<section id="exp" hidden>
+ <div class="box">
+  <div class="row"><input type="date" id="eD"><select id="eC"><option>قطع غيار</option><option>إكسسوارات</option><option>إيجار</option><option>كهرباء ومولد</option><option>رواتب</option><option>أدوات</option><option>أخرى</option></select></div>
+  <div class="row"><input id="eT" placeholder="الوصف (مثال: شاشة سامسونغ)"><input id="eA" type="number" inputmode="decimal" placeholder="المبلغ (د.ع)"></div>
+  <button class="btn" id="eAdd">إضافة مصروف</button>
+ </div>
+ <div class="box">
+  <input type="month" id="eM">
+  <div class="mu" style="margin-top:8px">مجموع الشهر</div>
+  <div class="tot" id="eTot">0</div>
+  <div class="chips" id="eCh"></div>
+ </div>
+ <div class="box" id="eL"></div>
+</section>
+
+<section id="stk" hidden>
+ <div class="box">
+  <input id="q" type="search" placeholder="ابحث باسم الجهاز أو جزء منه (مثال: 13 أو note 10 أو 6.1)">
+  <label class="c"><input type="checkbox" id="onlyIn"> عرض المتوفر عندي فقط</label>
+  <div class="mu">اكتب اسم اللاصقة اللي عندك، تظهر كل الأجهزة اللي يناسبها نفس المقاس. اضغط + لتسجيل الكمية.</div>
+ </div>
+ <div id="sL"></div>
+ <div id="wB"></div>
+ <details class="box"><summary>➕ إضافة مجموعة أجهزة جديدة</summary>
+  <p class="mu">اكتب الأجهزة المتوافقة مفصولة بفاصلة.</p>
+  <input id="nN" placeholder="Redmi 12C, Poco C55, ..." style="margin-bottom:8px">
+  <div class="row"><input id="nS" placeholder='الحجم بالإنش (اختياري)'><button class="btn" id="nAdd">إضافة</button></div>
+ </details>
+</section>
+
+<section id="bak" hidden>
+ <div class="box">
+  <p>كل بياناتك محفوظة داخل متصفح هذا الجهاز فقط. إذا مسحت بيانات المتصفح تضيع، فخذ نسخة احتياطية بين فترة وفترة.</p>
+  <button class="btn" id="bEx">إنشاء نسخة</button>
+  <textarea id="bT" placeholder="انسخ النص من هنا أو الصق نسخة قديمة"></textarea>
+  <button class="btn s" id="bIm">استرجاع من النص</button>
+  <div class="mu" id="bM"></div>
+ </div>
+</section>
+</main>
+<div class="ov" id="ov" hidden><div class="dl"><p id="dM"></p><input id="dI" type="number" inputmode="decimal" hidden><div class="ac"><button class="btn" id="dOk">موافق</button><button class="btn s" id="dNo">إلغاء</button></div></div></div>
+
+<script>
+// قاعدة الأجهزة: كل سطر = مجموعة أجهزة تتوافق معها نفس اللاصقة | الحجم
+const B=[
+"iPhone 6, iPhone 6s, iPhone 7, iPhone 8, iPhone SE 2020, iPhone SE 2022|4.7",
+"iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8 Plus|5.5",
+"iPhone X, iPhone XS, iPhone 11 Pro|5.8",
+"iPhone XR, iPhone 11|6.1",
+"iPhone XS Max, iPhone 11 Pro Max|6.5",
+"iPhone 12, iPhone 12 Pro, iPhone 13, iPhone 13 Pro, iPhone 14|6.1",
+"iPhone 12 mini|5.4","iPhone 13 mini|5.4",
+"iPhone 12 Pro Max, iPhone 13 Pro Max, iPhone 14 Plus|6.7",
+"iPhone 14 Pro, iPhone 15, iPhone 15 Pro, iPhone 16|6.1",
+"iPhone 14 Pro Max, iPhone 15 Plus, iPhone 15 Pro Max, iPhone 16 Plus|6.7",
+"Samsung Galaxy A50, Galaxy A30, Galaxy A30s, Galaxy A20, Galaxy M30, Galaxy M31|6.4",
+"Samsung Galaxy A51, Galaxy A71 (نسخة مسطحة حسب الموديل)|6.5",
+"Samsung Galaxy A10, Galaxy A10s, Galaxy M10|6.2",
+"Samsung Galaxy Note 10, Galaxy S10|6.3",
+"Samsung Galaxy S20 FE, Galaxy S21 FE|6.4",
+"Samsung Galaxy A32 4G, Galaxy A22 4G, Galaxy M32|6.4",
+"Xiaomi Redmi Note 8, Redmi Note 8T|6.3",
+"Xiaomi Redmi Note 9 Pro, Redmi Note 9S, Redmi Note 10 Pro, Poco X3 NFC, Poco X3 Pro|6.67",
+"Xiaomi Redmi Note 10, Redmi Note 10S, Poco M5s|6.43",
+"Xiaomi Redmi Note 11, Redmi Note 11S, Poco M4 Pro 4G|6.43",
+"Xiaomi Redmi 9, Redmi 9A, Poco M2|6.53",
+"Xiaomi Redmi 10, Redmi 10 2022, Redmi Note 11 4G (2022)|6.5",
+"Huawei P30 Lite, Huawei Nova 4e|6.15",
+"Huawei Y9 Prime 2019, Huawei P Smart Z, Honor 9X|6.59",
+"Huawei Y7 Prime 2019, Huawei Y7 2019|6.26",
+"Oppo A5 2020, Oppo A9 2020|6.5",
+"Realme C11, Realme C12, Realme C15|6.5",
+"Infinix Hot 10, Infinix Hot 10S, Infinix Hot 11S|6.82",
+"Tecno Spark 7, Tecno Spark 7 Pro|6.52"
+].map(s=>{const[a,z]=s.split("|");return{n:a.split(",").map(x=>x.trim()),s:z}});
+const $=id=>document.getElementById(id);
+// نوافذ داخل الصفحة بدل alert/confirm/prompt (المتصفح يمنعها داخل الصفحات المنشورة)
+function dlg(msg,o={}){return new Promise(res=>{
+ const i=$("dI");$("dM").textContent=msg;i.hidden=!o.input;i.value="";$("dNo").hidden=!!o.info;$("ov").hidden=false;
+ if(o.input)i.focus();
+ const end=v=>{$("ov").hidden=true;$("dOk").onclick=$("dNo").onclick=null;res(v)};
+ $("dOk").onclick=()=>end(o.input?i.value:true);$("dNo").onclick=()=>end(o.input?null:false)})}
+let db={exp:[],sales:[],rep:[],stock:{},custom:[]};
+try{const r=localStorage.getItem("shopdb");if(r)db=Object.assign(db,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("shopdb",JSON.stringify(db))}catch(e){dlg("تعذر الحفظ في المتصفح",{info:1})}};
+const fmt=n=>Number(n).toLocaleString("en");
+const tel=s=>String(s).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d+]/g,"");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>s.toLowerCase().replace(/[\s\-_]/g,"");
+const today=new Date();$("eD").valueAsDate=today;$("eM").value=today.toISOString().slice(0,7);
+
+// التبويبات
+$("nav").onclick=e=>{const t=e.target.dataset.t;if(!t)return;
+ for(const b of $("nav").children)b.classList.toggle("on",b===e.target);
+ for(const id of["sal","rep","exp","stk","bak"])$(id).hidden=id!==t};
+
+// المبيعات
+$("sD").valueAsDate=today;$("sM").value=today.toISOString().slice(0,7);
+const pv=()=>{const p=($("sP").value-$("sC").value)*($("sQ").value||1);const e=$("sPre");e.textContent="الربح: "+fmt(p||0);e.style.color=p<0?"var(--bad)":"var(--ok)"};
+["sC","sP","sQ"].forEach(i=>$(i).oninput=pv);
+function drawSal(){
+ const day=$("sDay").value,m=day||$("sM").value;$("sDayX").hidden=!day;const per=day?"اليوم":"الشهر";
+ const l=db.sales.filter(x=>x.d.startsWith(m)).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id);
+ const rp2=db.rep.filter(x=>(x.d||"").startsWith(m));
+ const sRev=l.reduce((s,x)=>s+x.p*x.q,0),sCost=l.reduce((s,x)=>s+x.c*x.q,0),rRev=rp2.reduce((s,x)=>s+x.tot,0),rCost=rp2.reduce((s,x)=>s+(x.c||0),0);
+ const rev=sRev+rRev,cost=sCost+rCost,pr=rev-cost;
+ $("sBr").textContent="مبيعات: "+fmt(sRev-sCost)+" · تصليح: "+fmt(rRev-rCost)+" · متبقي عند الزبائن: "+fmt(rp2.reduce((s,x)=>s+Math.max(0,x.tot-x.pd),0));
+ const ex=db.exp.filter(x=>x.d.startsWith(m)).reduce((s,x)=>s+x.a,0);
+ $("sT1").textContent=fmt(rev);$("sT2").textContent=fmt(cost);
+ $("sT3").textContent=fmt(pr)+" د.ع";$("sT3").style.color=pr<0?"var(--bad)":"var(--ok)";
+ $("sT4").textContent=fmt(pr-ex);$("sPer").textContent=per;
+ const rows=rp2.map(x=>`<div class="it"><div><div>🔧 ${esc(x.n)} — ${esc(x.f)}</div><div class="mu">${x.d} · قطع ${fmt(x.c||0)} ← أجرة ${fmt(x.tot)}</div></div><div><b style="color:var(${x.tot-(x.c||0)<0?"--bad":"--ok"})">${x.tot-(x.c||0)>0?"+":""}${fmt(x.tot-(x.c||0))}</b></div></div>`).join("");
+ $("sL2").innerHTML=(l.length||rp2.length)?rows+l.map(x=>{const p=(x.p-x.c)*x.q;return `<div class="it"><div><div>${esc(x.n)}${x.q>1?" × "+x.q:""}</div><div class="mu">${x.d} · شراء ${fmt(x.c)} ← بيع ${fmt(x.p)}</div></div><div><b style="color:var(${p<0?"--bad":"--ok"})">${p>0?"+":""}${fmt(p)}</b> <button class="x" data-id="${x.id}" aria-label="حذف">×</button></div></div>`}).join(""):'<div class="mu">لا توجد مبيعات في هذا '+(day?"اليوم":"الشهر")+'. سجّل أول بيع من الأعلى.</div>';
+}
+$("sAdd").onclick=()=>{const c=parseFloat($("sC").value),p=parseFloat($("sP").value),q=parseInt($("sQ").value)||1,n=$("sN").value.trim();
+ if(!n||isNaN(c)||isNaN(p)||!$("sD").value){dlg("اكتب اسم المادة وسعر الشراء وسعر البيع",{info:1});return}
+ db.sales.push({id:Date.now(),d:$("sD").value,n,c,p,q});save();
+ $("sM").value=$("sD").value.slice(0,7);if($("sDay").value)$("sDay").value=$("sD").value;$("sN").value="";$("sC").value="";$("sP").value="";$("sQ").value=1;pv();drawSal();drawExp()};
+$("sDay").onchange=drawSal;$("sM").onchange=()=>{$("sDay").value="";drawSal()};$("sDayX").onclick=()=>{$("sDay").value="";drawSal()};
+$("sL2").onclick=async e=>{const id=e.target.dataset.id;if(id&&await dlg("حذف هذا البيع؟")){db.sales=db.sales.filter(x=>x.id!=id);save();drawSal()}};
+
+// المصروفات
+function drawExp(){
+ const m=$("eM").value,l=db.exp.filter(x=>x.d.startsWith(m)).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id);
+ $("eTot").textContent=fmt(l.reduce((s,x)=>s+x.a,0))+" د.ع";
+ const c={};l.forEach(x=>c[x.c]=(c[x.c]||0)+x.a);
+ $("eCh").innerHTML=Object.entries(c).map(([k,v])=>`<span class="chip">${esc(k)}: ${fmt(v)}</span>`).join("");
+ $("eL").innerHTML=l.length?l.map(x=>`<div class="it"><div><div>${esc(x.t)}</div><div class="mu">${x.d} · ${esc(x.c)}</div></div><div><b>${fmt(x.a)}</b> <button class="x" data-id="${x.id}" aria-label="حذف">×</button></div></div>`).join(""):'<div class="mu">لا توجد مصروفات في هذا الشهر. أضف أول مصروف من الأعلى.</div>';
+ drawSal();
+}
+$("eAdd").onclick=()=>{const a=parseFloat($("eA").value),t=$("eT").value.trim();
+ if(!t||!(a>0)||!$("eD").value){dlg("اكتب الوصف والمبلغ والتاريخ",{info:1});return}
+ db.exp.push({id:Date.now(),d:$("eD").value,c:$("eC").value,t,a});save();
+ $("eM").value=$("eD").value.slice(0,7);$("eT").value="";$("eA").value="";drawExp()};
+$("eL").onclick=async e=>{const id=e.target.dataset.id;if(id&&await dlg("حذف هذا المصروف؟")){db.exp=db.exp.filter(x=>x.id!=id);save();drawExp()}};
+$("eM").onchange=drawExp;
+
+// الزبائن
+const nowT=new Date();$("rD").valueAsDate=nowT;$("rT").value=nowT.toTimeString().slice(0,5);
+const rp=()=>{const r=($("rTot").value||0)-($("rPd").value||0);const e=$("rPre");e.textContent="المتبقي: "+fmt(r);e.style.color=r>0?"var(--bad)":"var(--ok)"};
+["rTot","rPd"].forEach(i=>$(i).oninput=rp);
+function drawRep(){
+ const q=$("rQ").value.trim().toLowerCase(),o=$("rOnly").checked;
+ $("rDebt").textContent=fmt(db.rep.reduce((s,x)=>s+Math.max(0,x.tot-x.pd),0))+" د.ع";
+ const l=db.rep.filter(x=>(!o||x.tot-x.pd>0)&&(!q||(x.n+" "+x.p+" "+x.f).toLowerCase().includes(q))).sort((a,b)=>(b.d+b.t).localeCompare(a.d+a.t));
+ $("rL").innerHTML=l.length?l.map(x=>{const r=x.tot-x.pd;return `<div class="box g ${r<=0?"in":""}"><div class="it" style="border:0;padding:0"><div><b>${esc(x.n)}</b> <a href="tel:${esc(tel(x.p))}" data-tel="${esc(tel(x.p))}" target="_blank" rel="noopener" style="color:var(--ac);text-decoration:underline" dir="ltr">${esc(x.p)}</a></div><button class="x" data-del="${x.id}" aria-label="حذف">×</button></div>
+ <div>🔧 ${esc(x.f)}</div><div class="mu">${x.d} · ${x.t}</div>
+ <div class="pay"><span>الكلي: <b>${fmt(x.tot)}</b></span><span>المدفوع: <b>${fmt(x.pd)}</b></span><span>التكلفة: <b>${x.c?fmt(x.c):"لم تُسجل"}</b></span><span style="color:var(${r>0?"--bad":"--ok"})">المتبقي: <b>${fmt(Math.max(0,r))}</b></span></div>
+ <div class="qty"><button class="btn s" data-cost="${x.id}">${x.c?"تعديل التكلفة":"إضافة التكلفة"}</button><select class="st" data-st="${x.id}">${["قيد التصليح","جاهز","تم التسليم"].map(k=>`<option${k==x.st?" selected":""}>${k}</option>`).join("")}</select>${r>0?`<button class="btn s" data-pay="${x.id}">تسديد دفعة</button>`:'<span class="badge">مسدد ✔</span>'}</div></div>`}).join(""):'<div class="box mu">لا توجد سجلات. سجّل أول زبون من الأعلى.</div>';
+}
+$("rAdd").onclick=()=>{const n=$("rN").value.trim(),f=$("rF").value.trim(),tot=parseFloat($("rTot").value)||0,pd=parseFloat($("rPd").value)||0;
+ if(!n||!f){dlg("اكتب اسم الزبون والعطل",{info:1});return}
+ db.rep.push({id:Date.now(),n,p:$("rP").value.trim(),f,d:$("rD").value,t:$("rT").value,tot,pd,c:parseFloat($("rC").value)||0,st:$("rS").value});save();
+ ["rN","rP","rF","rTot","rPd","rC"].forEach(i=>$(i).value="");rp();drawRep();drawSal()};
+$("rL").onclick=async e=>{const a=e.target.closest("a[data-tel]");if(a){e.preventDefault();const n=a.dataset.tel;let w=null;try{w=window.open("tel:"+n,"_blank")}catch(_){}if(!w){try{navigator.clipboard.writeText(n)}catch(_){}dlg("تعذر فتح الاتصال تلقائياً. الرقم: "+n+" (تم نسخه)",{info:1})}return}const d=e.target.dataset;
+ if(d.del&&await dlg("حذف سجل الزبون؟")){db.rep=db.rep.filter(x=>x.id!=d.del);save();drawRep();drawSal()}
+ if(d.cost){const x=db.rep.find(y=>y.id==d.cost),v=parseFloat(await dlg("كم كلفتك القطع/الشراء لهذا الزبون؟"+(x.c?" (الحالية "+fmt(x.c)+")":""),{input:1}));if(!isNaN(v)&&v>=0){x.c=v;save();drawRep();drawSal()}}
+ if(d.pay){const x=db.rep.find(y=>y.id==d.pay),v=parseFloat(await dlg("مبلغ الدفعة (المتبقي "+fmt(x.tot-x.pd)+")",{input:1}));if(v>0){x.pd+=v;save();drawRep();drawSal()}}};
+$("rL").onchange=e=>{const id=e.target.dataset.st;if(id){db.rep.find(x=>x.id==id).st=e.target.value;save()}};
+$("rQ").oninput=drawRep;$("rOnly").onchange=drawRep;
+
+// الوضع الليلي والنهاري
+const dm=()=>matchMedia("(prefers-color-scheme:dark)").matches;
+function setTh(t){document.documentElement.dataset.theme=t;$("tg").textContent=t=="dark"?"☀️":"🌙";try{localStorage.setItem("shoptheme",t)}catch(e){}}
+let th=null;try{th=localStorage.getItem("shoptheme")}catch(e){}
+setTh(th||(dm()?"dark":"light"));
+$("tg").onclick=()=>setTh(document.documentElement.dataset.theme=="dark"?"light":"dark");
+
+// اللواصق
+const all=()=>B.map((g,i)=>({id:"b"+i,...g})).concat(db.custom.map((g,i)=>({id:"c"+i,...g})));
+function drawStk(){
+ const q=norm($("q").value),only=$("onlyIn").checked;
+ let l=all().filter(g=>{
+  const has=(db.stock[g.id]||0)>0;
+  if(only&&!has)return false;
+  if(!q)return has;
+  return g.n.some(x=>norm(x).includes(q))||(g.s&&g.s.includes($("q").value.trim()))});
+ $("sL").innerHTML=l.length?l.map(g=>{const k=db.stock[g.id]||0;
+  return `<div class="box g ${k?"in":""}"><div class="mu">${g.s?esc(g.s)+" إنش":""} ${k?'<span class="badge">'+(g.s?" · ":"")+'متوفر عندك</span>':""}</div><div>${g.n.map(x=>`<span class="dev ${q&&norm(x).includes(q)?"m":""}">${esc(x)}</span>`).join("")}</div>
+  <div class="qty"><button class="btn s" data-g="${g.id}" data-d="-1">−</button><b>${k}</b><button class="btn s" data-g="${g.id}" data-d="1">+</button><span class="mu">الكمية عندك</span></div></div>`}).join(""):
+  `<div class="box mu">${q?"ما لقيت جهاز بهذا الاسم. جرّب جزءاً أقصر من الاسم، أو أضف مجموعة جديدة من الأسفل.":"ما سجلت أي لاصقة بعد. ابحث عن جهاز واضغط + لتسجيل الكمية."}</div>`;
+}
+$("q").oninput=()=>{drawStk();drawW()};$("onlyIn").onchange=drawStk;
+$("sL").onclick=e=>{const g=e.target.dataset.g;if(!g)return;
+ db.stock[g]=Math.max(0,(db.stock[g]||0)+ +e.target.dataset.d);save();drawStk()};
+// بحث ذكي عن أجهزة ثانية بنفس اللاصق (Claude)
+let SM=null,W={q:"",r:null,busy:0,err:""};
+try{if(window.claude&&claude.use)claude.use("sample").then(x=>{SM=x;drawW()}).catch(()=>{})}catch(e){}
+function drawW(){
+ const q=$("q").value.trim(),h=$("wB");
+ if(!SM||!q){h.innerHTML="";return}
+ if(W.q!==q||(!W.r&&!W.busy)){h.innerHTML=`<div class="box"><button class="btn s" id="wGo">🌐 دوّر عن أجهزة ثانية تناسبها نفس اللاصقة</button>${W.err&&W.q===q?`<div class="mu">${esc(W.err)}</div>`:""}</div>`;return}
+ if(W.busy){h.innerHTML='<div class="box mu">جاري البحث...</div>';return}
+ const r=W.r,dv=r.devices||[],nm=x=>norm(x);
+ const fit=all().filter(g=>(db.stock[g.id]||0)>0&&g.n.some(a=>dv.some(b=>nm(a).includes(nm(b))||nm(b).includes(nm(a)))));
+ h.innerHTML=`<div class="box g ${fit.length?"in":""}"><div class="mu">${esc(W.q)} · الحجم ${esc(r.size||"؟")} إنش</div>
+ <div>${dv.map(x=>`<span class="dev">${esc(x)}</span>`).join("")||"لم أجد أجهزة أخرى"}</div>
+ ${fit.length?`<div style="margin-top:8px"><b>✅ عندك لاصقة تناسب:</b>${fit.map(g=>`<div class="mu">${esc(g.n.slice(0,3).join("، "))}${g.s?" · "+esc(g.s)+" إنش":""} · الكمية ${db.stock[g.id]}</div>`).join("")}</div>`:'<div class="mu" style="margin-top:8px">ما عندك لاصقة متوفرة من هذه الأجهزة.</div>'}
+ ${r.note?`<div class="mu">${esc(r.note)}</div>`:""}
+ <div class="mu">النتيجة من معرفة Claude وليست بحثاً حياً بالإنترنت، تأكد من الموديل قبل الشراء.</div>
+ <div class="row" style="margin-top:8px"><button class="btn s" id="wMore">🔁 دوّر عن المزيد</button><button class="btn s" id="wAdd">➕ احفظها كمجموعة جديدة</button></div>${W.err&&W.q===q?`<div class="mu">${esc(W.err)}</div>`:""}</div>`}
+$("wB").onclick=async e=>{
+ if(e.target.id==="wAdd"&&W.r){const n=[W.q,...(W.r.devices||[])].filter((x,i,a)=>a.findIndex(y=>norm(y)===norm(x))===i);db.custom.push({n,s:String(W.r.size||"")});save();$("q").value=W.q;W.r=null;drawStk();return}
+ if(e.target.id==="wMore"&&SM&&W.r&&!W.busy){const q=W.q,keep=W.r,cur=keep.devices||[];W.busy=1;W.err="";drawW();
+  try{const m=await SM.json(`Phone/tablet model: "${q}" (screen ${keep.size||"?"} inches). These models are already listed as sharing the same screen protector: ${JSON.stringify(cur)}. List ADDITIONAL phone/tablet models worldwide (any brand, region, or variant) that use the same screen protector and are NOT in that list. Reply with JSON only: {"devices":["Brand Model"]}`,{modelTier:"complex"});
+   const add=(m&&Array.isArray(m.devices)?m.devices:[]).map(x=>String(x).trim()).filter(Boolean);
+   const al=[...cur,...add].filter((x,i,a)=>a.findIndex(y=>norm(y)===norm(x))===i);
+   W.r=Object.assign({},keep,{devices:al});if(al.length===cur.length)W.err="ما لقيت أجهزة إضافية";W.busy=0}
+  catch(x){W.r=keep;W.busy=0;W.err=x&&x.code==="not_granted"?"لازم توافق على الطلب":"تعذر البحث الآن، جرّب مرة ثانية"}
+  drawW();return}
+ if(e.target.id!=="wGo"||!SM)return;
+ const q=$("q").value.trim();W={q,r:null,busy:1,err:""};drawW();
+ try{const r=await SM.json(`Phone/tablet model: "${q}". Return its screen size in inches and an EXHAUSTIVE list of every phone/tablet model worldwide (all brands, all regions, all regional and carrier variants, e.g. 4G/5G/Lite/Pro/Neo/rebrands) whose screen protector is the same (same dimensions and same flat/curved type). Do not limit the count: list every one you know, typically 20 to 60 models when they exist, and do not leave out models just to be brief. Use the plain marketing name without duplicates. Reply with JSON only: {"size":"6.7","devices":["Brand Model"],"note":"short Arabic note if fit differs by variant, else empty"}`,{modelTier:"complex"});
+  W.r=r&&typeof r==="object"?r:{devices:[]};W.busy=0}catch(x){W.busy=0;W.err=x&&x.code==="not_granted"?"لازم توافق على الطلب":"تعذر البحث الآن، جرّب مرة ثانية"}
+ drawW()};
+$("nAdd").onclick=()=>{const n=$("nN").value.split(/[,،]/).map(x=>x.trim()).filter(Boolean),s=$("nS").value.trim();
+ if(!n.length){dlg("اكتب اسم جهاز واحد على الأقل",{info:1});return}
+ db.custom.push({n,s});save();$("nN").value="";$("nS").value="";$("q").value=n[0];drawStk()};
+
+// النسخ الاحتياطي
+$("bEx").onclick=()=>{$("bT").value=JSON.stringify(db);$("bT").select();$("bM").textContent="انسخ النص واحفظه في مكان آمن (ملاحظات أو واتساب لنفسك)."};
+$("bIm").onclick=async()=>{try{const d=JSON.parse($("bT").value);if(!Array.isArray(d.exp))throw 0;
+ if(!await dlg("راح تستبدل البيانات الحالية بالنسخة. متأكد؟"))return;
+ db=Object.assign({exp:[],sales:[],rep:[],stock:{},custom:[]},d);save();drawExp();drawStk();drawRep();$("bM").textContent="تم الاسترجاع ✔"}catch(e){$("bM").textContent="النص غير صالح."}};
+
+drawExp();drawStk();drawRep();
+</script>
+<script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+</body>
+</html>
